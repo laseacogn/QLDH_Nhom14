@@ -1,0 +1,243 @@
+USE master;  
+GO  
+IF DB_ID (N'Pizza') IS NOT NULL  
+DROP DATABASE Pizza;  
+GO  
+CREATE DATABASE Pizza 
+go
+use Pizza 
+go
+---Bảng Khách Hàng
+create table KhachHang
+(
+	MaKH int NOT NULL,
+	HoTen nvarchar(100),
+	SoDT varchar(15),
+	DiaChi nvarchar(1000),
+	primary key(MaKH)
+)
+go
+---Bảng Nhân Viên
+create table NhanVien
+(
+	MaNV int NOT NULL,
+	HoTen nvarchar(100),
+	SoDT varchar(15),
+	GioiTinh nvarchar(100),
+	NgaySinh date,
+	DiaChi nvarchar(1000),
+	primary key(MaNV)
+)
+go
+---Bảng Loại Sản Phẩm: hình thức nhận sản phẩm
+create table LoaiSP
+(
+	MaLoai int,
+	TenLoai nvarchar(100),
+	primary key(MaLoai)
+)
+go
+---Bảng Sản Phẩm
+create table SanPham
+(
+	MaSP int NOT NULL,
+	TenSP nvarchar(100),
+	DonGia numeric (12,0),
+	SoLuong int,
+	MaLoai int,
+	primary key(MaSP),
+	foreign key (MaLoai) references LoaiSP
+)
+go
+---Bảng Chi Nhánh
+create table ChiNhanh
+(
+	MaCN int NOT NULL,
+	TenCN nvarchar(100),
+	DiaChi nvarchar(1000),
+	primary key(MaCN)
+)
+go
+---Bảng Hóa Đơn
+create table HoaDon
+(
+	MaHoaDon int,
+	MaNV int,
+	MaKH int,
+	MaCN int,
+	ThoiGian time,
+	TinhTrang nvarchar(100),
+	GhiChu nvarchar(100),
+	primary key(MaHoaDon),
+	foreign key (MaNV) references NhanVien,
+	foreign key (MaKH) references KhachHang,
+	foreign key (MaCN) references ChiNhanh
+)
+go
+---Bảng Hóa Đơn Chi Tiết
+create table HoaDonChiTiet
+(
+	MaHD int,
+	MaSP int,
+	SoLuong int,
+	DonGia int,
+	GiamGia int,
+	ThanhTien numeric(12,0)
+	primary key(MaHD),
+	foreign key (MaSP) references SanPham
+)
+go
+---Insert Data
+insert into KhachHang 
+values 
+	(72679, N'Nguyễn Cao Ngân', '0905734696', N'746 Trần Cao Vân'),
+	(44581, N'Đào Thị Ngọc Trâm', '0914288987', N'16 Bàu Làng'),
+	(98563, N'Trần Thành Tâm', '0914039221', N'53D Lương Thế Vinh'),
+	(22157,	N'Bùi Đăng Trí', '0905890750', N'16 Bàu Năng'),
+	(49312,	N'Phạm Anh Huy', '0906035943', N'120 Lê Duẩn'),
+	(68710,	N'Nguyễn Đình Nhật Tân', '0358699056', N'27 Tôn Thất Đạm'),
+	(72114,	N'Trương Thái Thảo Nguyên', '0905515815', N'55 Đoàn Thị Điểm'),
+	(54189,	N'Phan Thị Yến Nhi', '0905626436', N'69 Đống Đa'),
+	(21681,	N'Nguyễn Thị Hoài Phương', '0905034212', N'12 Nguyễn Đức Trung'),
+	(90182,	N'Tăng Kim Oanh', '0906175563', N'22 Lê Lợi'),
+	(36178, N'Nguyễn Vạn Thuận', '0358991722', N'127 Lê Đình Lý'),
+	(21985,	N'Ngô Thị Thùy Trâm', '0905738096',	N'48 Trần Hưng Đạo,'),
+	(62701,	N'Nguyễn Thị Thu Trang', '0906455530', N'20 Đất Mặn 1'),
+	(40188,	N'Lê Văn Quốc Hùng', '0914322786', N'18 Nguyễn Phước Nguyên'),
+	(70126,	N'Nguyễn Lê Minh Thư', '0973444425', N'428 Điện Biên Phủ')
+go
+select * from KhachHang
+insert into NhanVien 
+values 
+	(09060, N'Mai Văn Thành', '0982612960', N'Nam', '1998/04/16', N'68 Trần Hưng Đạo'),
+	(17738,	N'Huỳnh Thị Xuân Hương', '0776138620', N'Nữ', '2000/07/20',	N'97 Ngũ Hành Sơn'),
+	(22124,	N'Nguyễn Minh Hưng', '0365269445', N'Nam', '2002/03/07', N'12 Lê Độ'),
+	(22227,	N'Lê Thị Hương Liên', '0356069520', N'Nữ', '2002/02/18', N'56 Thái Thị Bôi'),
+	(22453,	N'Huỳnh Lê Tân', '0349340633',	N'Nam',	'2001/12/28', N'18 Nguyễn Đức Trung'),
+	(22815, N'Trần Tiến Đạt', '0772035305',	N'Nam',	'2001/11/16', N'03 Hoàng Văn Thụ'),
+	(23094,	N'Nguyễn Thị Phương Oanh', '0935342144', N'Nữ', '2001/08/27', N'246 Hà Huy Tập'),
+	(23096,	N'Mai Minh Hoàng',	'0934985559', N'Nam',	'2001/06/19', N'91 Đoàn Thị Điểm'),
+	(23098, N'Phan Nguyễn Thu Hà',	'0898160929', N'Nữ',	'2001/09/15', N'05 Nguyễn Đức Cảnh'),
+	(23164,	N'Hoàng Thị Mỹ Phượng',	'0935071893', N'Nữ', '2001/11/24', N'23 Quang Trung'),
+	(24314,	N'Lê Phú Quang', '0357094092', N'Nam', '2003/06/08', N'746 Nguyễn Văn Thoại'),
+	(25055,	N'Ngô Ngọc Anh Thư', '0934813415',	N'Nữ',	'2003/01/10', N'19 Nguyễn Văn Linh'),
+	(25166,	N'Lê Thảo Hiền', '0905486242', N'Nữ', '2002/09/08', N'214 Bàu Làng'),
+	(25308,	N'Trương Tuyết Nhã Trân', '0982613960',	N'Nữ', '2003/08/11', N'145 Hà Khê'),
+	(25634,	N'Trần Văn Thanh Duy', '0934954864', N'Nam', '2003/07/19', N'228 Nguyễn Tất Thành')
+go
+select * from NhanVien
+insert into LoaiSP
+values
+	(1, N'Dien In'),
+	(2, N'Take Away'),
+	(3, N'Delivery')
+go
+select * from LoaiSP
+select * from LoaiSP
+insert into SanPham
+values
+	(302201, N'Pesto P-M', 249000, 1, 001),
+	(310006, N'Shrimp rose', 129000, 1, 001),
+	(360001, N'Platter – CCW',	169000,1, 002),
+	(302206, N'Seafood deluxe P-M',	219000, 1, 001),
+	(301203, N'Tropical Seafood CT-M', 219000,	1, 001),
+	(350003, N'Chicken Strip', 109000,	1, 003),
+	(320202, N'Salad Strip M', 79000,	1, 003),
+	(302112, N'Aloha P-S', 129000,	1, 003),
+	(340008, N'Calamari', 109000,	1, 002),
+	(320203, N'Ceasar’s Salad M', 129000, 1, 003),
+	(303217, N'Chicken Caldo CC-M',	299000, 1, 001),
+	(340012, N'Garlic Bread', 59000, 1, 003),
+	(340003, N'Quesadillas', 119000, 1, 001),
+	(340013, N'Bread Stick', 49000, 1, 002),
+	(310001, N'H&M pasta',	89000,	1, 001)
+insert into ChiNhanh
+values
+	(714460062, N'The Pizza Company Co.op Đà Nẵng', N'Tầng Trệt Co.op Da Nang, số 478 Điện Biên Phủ, Thanh Khê Đông, Thanh Khê, Đà Nẵng'),
+	(714460098, N'The Pizza Company Nguyễn Văn Thoại Đà Nẵng', N'173 Nguyễn Văn Thoại, An Hải Đông, Sơn Trà, Đà Nẵng'),
+	(714460075, N'The Pizza Company Nguyễn Văn Linh Đà Nẵng', N'Số 1 Nguyễn Văn Linh, Bình Hiên, Hải Châu, Đà Nẵng')
+insert into HoaDon
+values
+	(1074047, 23164, 72679,	714460062, '10:40', N'N/A', N'N/A'), 
+	(1072516, 23098, 44581, 714460062,	'17:47', N'N/A', N'N/A'),
+	(1070678, 25308, 98563, 714460062,'17:49', N'N/A', N'N/A'),
+	(1070912, 23096, 22157, 714460062, '19:02', N'N/A', N'N/A'),
+	(1072145, 23164, 49312, 714460062, '20:18', N'N/A', N'N/A'),
+	(1071358, 23096, 68710, 714460062, '21:21', N'N/A', N'N/A'),
+	(1074519, 25308, 72114, 714460062, '17:48', N'N/A', N'N/A'),
+	(1072261, 25634, 54189, 714460062, '11:31', N'N/A', N'N/A'),
+	(1079812, 23098, 21681, 714460062, '14:50', N'N/A', N'N/A'),
+	(1071127, 23096, 90182, 714460062, '19:00', N'N/A', N'N/A'),
+	(1072517, 25308, 36178, 714460062, '16:31', N'N/A', N'N/A'),
+	(1076814, 23164, 62701, 714460062, '14:49', N'N/A', N'N/A'),
+	(1070217, 25634, 40188, 714460062, '14:34', N'N/A', N'N/A'),
+	(1075819, 23098, 70126, 714460062, '20:17', N'N/A', N'N/A')
+go
+select * from HoaDon
+
+insert into HoaDonChiTiet
+values
+	(1074047, 302201, 1, 249000, 0, 249000),
+	(1072516, 310006, 1, 129000, 0, 129000),
+	(1070678, 360001, 1, 169000, 0, 169000),
+	(1070912, 302206, 1, 219000, 0, 219000),
+	(1072145, 301203, 1, 219000, 0, 219000),
+	(1071358, 350003, 1, 109000, 0, 109000),
+	(1074519, 320202, 1, 79000,	0, 79000),
+	(1072261, 302112, 1, 129000, 0, 129000),
+	(1079812, 340008, 1, 109000, 0, 109000),
+	(1071127, 320203, 1, 129000, 0, 129000),
+	(1072517, 303217, 1, 299000, 0, 299000),
+	(1078912, 340012, 1, 59000,	0, 59000),
+	(1076814, 340003, 1, 119000, 0, 119000),
+	(1070217, 340013, 1, 49000,	0, 49000),
+	(1075819, 310001, 1, 89000,	0, 89000)
+go
+
+---Tạo Index
+create nonclustered index idx_1 on HoaDon(MaNV)
+
+
+---Bảo mật csdl
+--Tạo tài khoản đăng nhập
+create login Nhom14_46K211 with
+password = 'Qtcsdl@2022'
+--Tạo users
+create user Nhom14_46K211 for login
+[Nhom14_46K211]
+--Cấp quyền
+grant
+select, insert on KhachHang to Nhom14_46K211
+
+---Data security: Mã hóa địa chỉ khách hàng
+--Tạo cột để lưu dữ liệu mã hóa
+alter table KhachHang add
+[Encrypted DiaChi] varbinary(MAX)
+go
+--Cập nhật dữ liệu đac được mã hóa vào cột vừa tạo
+update KhachHang
+set [Encrypted DiaChi] = ENCRYPTBYPASSPHRASE('DiaChi', convert(nvarchar(1000), DiaChi))
+go
+-- Xóa bỏ cột chưa được mã hóa
+alter table KhachHang drop column DiaChi
+--Truy vấn kết quả
+select * from KhachHang
+---Giải mã dữ liệu
+select MaKH, HoTen, SoDT,
+	convert(char, convert(nvarchar(1000), decryptbypassphrase('DiaChi', [encrypted DiaChi]))) as DiaChi
+from KhachHang
+
+---Backup dữ liệu
+--Full dattabase backups: Ở thời điểm 12/12/2022 00:00:00: thực hiện full backups
+backup database Pizza to disk = 'E:\BACKUP SQL\Nhom14_FULLBACKUP' with init
+
+--Differential database backups: 
+--Thêm 1 bản ghi mới vào bảng KhachHang, và ở thời điểm 12/12/2022 00:00:00 thực hiện differential database backups
+insert into KhachHang
+values (65432, N'Nguyễn Ngọc Bảo Châu', '0851444564', N'78 Trần Khánh Dư')
+backup database  Pizza to disk = 'E:\BACKUP SQL\Nhom14_DIFFERENTBACKUP' with init, differential
+
+--Transaction log backups: Thêm 1 bản ghi mới thứ 2 vào bảng KhachHang, và thực hiện transaction log backups
+insert into KhachHang
+values (54321,	N'Nguyễn Hoàng Dũng', '0562843700', N'41 Trần Cao Vân')
+backup log Pizza to disk = 'E:\BACKUP SQL\Nhom14_LOCKBACKUP'
